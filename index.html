@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attribution & Mix Modeling - Interactive Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass { backdrop-filter: blur(10px); background: rgba(255,255,255,0.85); }
+    .chip { transition: all 0.2s ease; }
+    .chip:hover { transform: translateY(-1px); }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    .gradient-text { background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-slate-50 to-emerald-50 min-h-screen">
+  
+  <!-- Header -->
+  <header class="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-emerald-600">
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="relative max-w-6xl mx-auto px-6 py-16">
+      <a href="https://valescabravo.github.io/" class="inline-flex items-center text-sm text-blue-200 hover:text-white mb-6">← Back to Portfolio</a>
+      <div class="text-center">
+        <h1 class="text-6xl md:text-7xl font-black text-white mb-6 leading-tight">
+          Attribution & 
+          <span class="block bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+            Mix Modeling
+          </span>
+        </h1>
+        <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto font-medium">
+          Master the two pillars of modern marketing measurement through 
+          <span class="text-yellow-300 font-semibold">interactive learning</span> and real-world examples
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <span class="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full text-sm font-semibold border border-white/30">
+            🎯 Multi-Touch Attribution
+          </span>
+          <span class="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full text-sm font-semibold border border-white/30">
+            📊 Marketing Mix Modeling
+          </span>
+          <span class="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full text-sm font-semibold border border-white/30">
+            ⚡ Interactive Learning
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Decorative Elements - hidden on very small screens -->
+    <div class="hidden sm:block absolute top-20 left-10 w-20 h-20 bg-yellow-400/20 rounded-full blur-xl animate-pulse"></div>
+    <div class="hidden sm:block absolute bottom-20 right-10 w-32 h-32 bg-pink-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+    <div class="hidden md:block absolute top-1/2 left-1/4 w-16 h-16 bg-cyan-400/20 rounded-full blur-xl animate-pulse delay-500"></div>
+  </header>
+
+  <main id="app" className="max-w-6xl mx-auto px-6 pb-20"></main>
+
+  <footer className="bg-gray-900 text-white py-8 mt-20">
+    <div className="max-w-6xl mx-auto px-6 text-center">
+      <p className="text-gray-300">© 2026 Valesca Bravo - Attribution & Mix Modeling Interactive Guide</p>
+    </div>
+  </footer>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Enhanced Card Component
+    const Card = ({ title, children, accent = 'blue', className = '', expandable = false, defaultExpanded = true }) => {
+      const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+      
+      const accentColors = {
+        blue: 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100',
+        emerald: 'border-emerald-500 bg-gradient-to-br from-emerald-50 to-emerald-100',
+        violet: 'border-violet-500 bg-gradient-to-br from-violet-50 to-violet-100',
+        amber: 'border-amber-500 bg-gradient-to-br from-amber-50 to-amber-100',
+        rose: 'border-rose-500 bg-gradient-to-br from-rose-50 to-rose-100'
+      };
+
+      return (
+        <div className={`glass shadow-xl rounded-2xl border-l-4 ${accentColors[accent]} ${className} transition-all duration-300 hover:shadow-2xl`}>
+          <div className={`p-6 ${expandable ? 'cursor-pointer' : ''}`} onClick={expandable ? () => setIsExpanded(!isExpanded) : undefined}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+              {expandable && (
+                <svg className={`w-6 h-6 text-gray-600 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+          </div>
+          {(!expandable || isExpanded) && (
+            <div className="px-6 pb-6 text-gray-700">
+              {children}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // Step Navigation Component
+    const StepNavigation = ({ steps, activeStep, onStepChange, progress }) => (
+      <div className="sticky top-4 z-20 mb-8">
+        <div className="glass rounded-2xl p-4 shadow-lg">
+          <div className="flex flex-wrap gap-2 mb-4">
+            {steps.map((step, index) => (
+              <button
+                key={index}
+                onClick={() => onStepChange(index + 1)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 chip ${
+                  activeStep === index + 1
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-white text-blue-700 hover:bg-blue-50 border border-blue-200'
+                }`}
+              >
+                <span className="font-bold mr-1">{index + 1}.</span>
+                {step.title}
+              </button>
+            ))}
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-gradient-to-r from-blue-500 to-emerald-600 h-2 rounded-full transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+          <div className="flex justify-between text-xs text-gray-600 mt-1">
+            <span>Step {activeStep} of {steps.length}</span>
+            <span>{Math.round(progress)}% Complete</span>
+          </div>
+        </div>
+      </div>
+    );
+
+    // Interactive Attribution Chart
+    const AttributionChart = ({ model, onModelChange }) => {
+      const models = {
+        linear: { data: [25, 25, 25, 25], label: 'Linear Attribution', desc: 'Equal credit to all touchpoints in the customer journey' },
+        decay: { data: [10, 20, 30, 40], label: 'Time Decay', desc: 'More credit to touchpoints closer to conversion' },
+        position: { data: [40, 15, 15, 30], label: 'Position-Based (U-Shape)', desc: 'More credit to first and last touchpoints' },
+        last: { data: [0, 0, 0, 100], label: 'Last Click', desc: 'All credit goes to the final touchpoint before conversion' },
+        first: { data: [100, 0, 0, 0], label: 'First Click', desc: 'All credit goes to the first touchpoint in the journey' },
+        data_driven: { data: [30, 20, 25, 25], label: 'Data-Driven', desc: 'Uses machine learning to assign credit based on actual conversion patterns' }
+      };
+
+      const colors = ['bg-blue-500', 'bg-emerald-500', 'bg-purple-500', 'bg-amber-500'];
+      const currentModel = models[model] || models.linear;
+
+      return (
+        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <div className="mb-6">
+            <h4 className="font-semibold text-lg mb-2">Attribution Models Comparison</h4>
+            <p className="text-sm text-gray-600 mb-4">Select different attribution models to see how credit is distributed across the customer journey</p>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+              {Object.keys(models).map((key) => (
+                <button
+                  key={key}
+                  onClick={() => onModelChange(key)}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    model === key
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {models[key].label}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mb-6">
+            <h5 className="text-sm font-medium text-gray-700 mb-3">Customer Journey: Awareness → Consideration → Intent → Conversion</h5>
+            <div className="flex gap-3 h-40 items-end bg-gradient-to-t from-gray-50 to-white rounded-lg p-4 border">
+              {currentModel.data.map((value, index) => (
+                <div key={index} className="flex-1 flex flex-col items-center">
+                  <div
+                    className={`w-full ${colors[index]} rounded-t transition-all duration-700 flex items-end justify-center text-white text-sm font-semibold relative group`}
+                    style={{ height: `${Math.max(value * 1.5, 8)}px` }}
+                  >
+                    {value > 0 && (
+                      <span className="absolute -top-6 text-gray-700 text-xs font-bold">{value}%</span>
+                    )}
+                    <div className="absolute -bottom-8 text-xs text-gray-600 text-center w-full">
+                      {['Awareness', 'Consideration', 'Intent', 'Conversion'][index]}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <div className="flex items-start gap-3">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+              <div>
+                <p className="font-medium text-blue-800">{currentModel.label}</p>
+                <p className="text-sm text-blue-700">{currentModel.desc}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // MMM Components Visualization
+    const MMMVisualization = () => {
+      const [selectedComponent, setSelectedComponent] = useState('media');
+      
+      const components = {
+        media: {
+          title: 'Media Spend',
+          description: 'Investment across different marketing channels and their effectiveness over time',
+          examples: ['TV advertising', 'Digital campaigns', 'Radio spots', 'Out-of-home advertising'],
+          color: 'bg-blue-500'
+        },
+        base: {
+          title: 'Base vs Incremental',
+          description: 'Separating organic business growth from marketing-driven incremental sales',
+          examples: ['Brand strength', 'Product quality', 'Distribution', 'Word-of-mouth'],
+          color: 'bg-emerald-500'
+        },
+        external: {
+          title: 'External Factors',
+          description: 'Environmental variables that influence business performance beyond marketing',
+          examples: ['Seasonality', 'Economic conditions', 'Competitor activity', 'Weather'],
+          color: 'bg-purple-500'
+        },
+        adstock: {
+          title: 'Adstock & Saturation',
+          description: 'How advertising effects decay over time and reach diminishing returns',
+          examples: ['Memory decay', 'Saturation curves', 'Carryover effects', 'Diminishing returns'],
+          color: 'bg-amber-500'
+        }
+      };
+
+      return (
+        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <h4 className="font-semibold text-lg mb-4">MMM Components Explorer</h4>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+            {Object.keys(components).map((key) => (
+              <button
+                key={key}
+                onClick={() => setSelectedComponent(key)}
+                className={`p-3 rounded-lg text-sm font-medium transition-all ${
+                  selectedComponent === key
+                    ? `${components[key].color} text-white shadow-md`
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {components[key].title}
+              </button>
+            ))}
+          </div>
+          
+          <div className="bg-gray-50 rounded-lg p-4 border">
+            <h5 className="font-semibold text-gray-800 mb-2">{components[selectedComponent].title}</h5>
+            <p className="text-gray-700 mb-3">{components[selectedComponent].description}</p>
+            <div className="grid grid-cols-2 gap-2">
+              {components[selectedComponent].examples.map((example, index) => (
+                <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className={`w-2 h-2 ${components[selectedComponent].color} rounded-full`}></div>
+                  <span>{example}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Comparison Framework
+    const ComparisonFramework = () => {
+      const [activeComparison, setActiveComparison] = useState('overview');
+      
+      const comparisons = {
+        overview: {
+          title: 'Overview Comparison',
+          mta: {
+            strength: 'Granular, real-time insights',
+            weakness: 'Privacy limitations, digital-only focus',
+            useCase: 'Campaign optimization and tactical decisions'
+          },
+          mmm: {
+            strength: 'Holistic view, privacy-safe, includes offline',
+            weakness: 'Less granular, periodic updates',
+            useCase: 'Strategic planning and budget allocation'
+          }
+        },
+        data: {
+          title: 'Data Requirements',
+          mta: {
+            strength: 'Individual user interactions, click-stream data',
+            weakness: 'Requires user consent and tracking',
+            useCase: 'Real-time campaign adjustments'
+          },
+          mmm: {
+            strength: 'Aggregated data, external factors, historical trends',
+            weakness: 'Needs 2+ years of data for accuracy',
+            useCase: 'Long-term strategic insights'
+          }
+        },
+        implementation: {
+          title: 'Implementation & Costs',
+          mta: {
+            strength: 'Faster setup, lower initial cost',
+            weakness: 'Ongoing privacy compliance costs',
+            useCase: 'Quick wins and immediate optimization'
+          },
+          mmm: {
+            strength: 'One-time setup, long-term value',
+            weakness: 'Higher upfront investment, expertise required',
+            useCase: 'Sustainable measurement framework'
+          }
+        }
+      };
+
+      const current = comparisons[activeComparison];
+
+      return (
+        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <h4 className="font-semibold text-lg mb-4">MTA vs MMM Comparison</h4>
+          
+          <div className="flex flex-wrap gap-2 mb-6">
+            {Object.keys(comparisons).map((key) => (
+              <button
+                key={key}
+                onClick={() => setActiveComparison(key)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeComparison === key
+                    ? 'bg-violet-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {comparisons[key].title}
+              </button>
+            ))}
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                <h5 className="font-semibold text-blue-800">Multi-Touch Attribution (MTA)</h5>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div>
+                  <span className="font-medium text-green-700">✓ Strengths: </span>
+                  <span className="text-gray-700">{current.mta.strength}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-red-700">⚠ Considerations: </span>
+                  <span className="text-gray-700">{current.mta.weakness}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-blue-700">🎯 Best for: </span>
+                  <span className="text-gray-700">{current.mta.useCase}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-4 h-4 bg-emerald-500 rounded"></div>
+                <h5 className="font-semibold text-emerald-800">Marketing Mix Modeling (MMM)</h5>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div>
+                  <span className="font-medium text-green-700">✓ Strengths: </span>
+                  <span className="text-gray-700">{current.mmm.strength}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-red-700">⚠ Considerations: </span>
+                  <span className="text-gray-700">{current.mmm.weakness}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-emerald-700">🎯 Best for: </span>
+                  <span className="text-gray-700">{current.mmm.useCase}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Resource Panel Component
+    const ResourcePanel = ({ type, resources, accent = 'blue' }) => {
+      const [activeResource, setActiveResource] = useState(null);
+
+      const icons = {
+        tool: (
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+          </svg>
+        ),
+        practice: (
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+        ),
+        tip: (
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+        )
+      };
+
+      const accentColors = {
+        blue: 'text-blue-600',
+        emerald: 'text-emerald-600',
+        violet: 'text-violet-600'
+      };
+
+      return (
+        <div className="space-y-3">
+          <h4 className={`font-semibold ${accentColors[accent]} flex items-center gap-2`}>
+            {icons[type]}
+            {type === 'tool' ? 'Tools & Platforms' : type === 'tip' ? 'Pro Tips' : 'Best Practices'}
+          </h4>
+          <div className="space-y-2">
+            {resources.map((resource, index) => (
+              <div key={index}>
+                <button
+                  onClick={() => setActiveResource(activeResource === index ? null : index)}
+                  className="w-full text-left p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-gray-800">{resource.title}</span>
+                    <svg className={`w-4 h-4 text-gray-500 transition-transform ${activeResource === index ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </button>
+                {activeResource === index && (
+                  <div className="mt-2 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
+                    <p className="text-sm text-gray-700 mb-2">{resource.description}</p>
+                    {resource.link && (
+                      <a href={resource.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline inline-flex items-center gap-1">
+                        Learn more 
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                          <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // Main Application Component
+    function App() {
+      const [activeStep, setActiveStep] = useState(1);
+      const [attributionModel, setAttributionModel] = useState('linear');
+
+      const steps = [
+        { title: 'Overview & Challenges' },
+        { title: 'Multi-Touch Attribution' },
+        { title: 'Marketing Mix Modeling' },
+        { title: 'Comparison & Integration' },
+        { title: 'Tools & Implementation' }
+      ];
+
+      const progress = (activeStep / steps.length) * 100;
+
+      return (
+        <div className="space-y-8">
+          <StepNavigation 
+            steps={steps} 
+            activeStep={activeStep} 
+            onStepChange={setActiveStep} 
+            progress={progress}
+          />
+
+          {/* Step 1: Overview & Challenges */}
+          {activeStep === 1 && (
+            <div className="space-y-6">
+              <Card title="The Modern Measurement Challenge" accent="rose">
+                <div className="grid lg:grid-cols-2 gap-6">
+                  <div>
+                    <p className="mb-4 text-gray-700">The digital marketing landscape is rapidly evolving. Traditional measurement approaches are becoming insufficient as privacy regulations strengthen and customer journeys become more complex.</p>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                        <div className="w-3 h-3 bg-red-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-sm"><strong>Cookie Deprecation:</strong> Third-party cookies being phased out by 2025</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                        <div className="w-3 h-3 bg-amber-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-sm"><strong>Privacy Regulations:</strong> GDPR, CCPA, and iOS 14.5+ limiting tracking</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-sm"><strong>Complex Journeys:</strong> Multiple touchpoints across online and offline channels</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-xl p-6 border border-gray-200">
+                      <h5 className="font-semibold text-gray-800 mb-4">The Two-Pillar Solution</h5>
+                      <div className="space-y-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-white text-sm font-bold">1</span>
+                          </div>
+                          <div>
+                            <div className="font-medium text-blue-800">Multi-Touch Attribution</div>
+                            <div className="text-sm text-gray-600">Granular, bottom-up tracking of customer interactions</div>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-white text-sm font-bold">2</span>
+                          </div>
+                          <div>
+                            <div className="font-medium text-emerald-800">Marketing Mix Modeling</div>
+                            <div className="text-sm text-gray-600">Holistic, top-down statistical analysis</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {/* Step 2: Multi-Touch Attribution */}
+          {activeStep === 2 && (
+            <div className="space-y-6">
+              <Card title="Multi-Touch Attribution (MTA)" accent="blue">
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div>
+                    <p className="mb-4 text-gray-700">Multi-Touch Attribution tracks every customer interaction across their journey, providing granular insights into how different marketing channels and campaigns contribute to conversions.</p>
+                    
+                    <div className="space-y-4">
+                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                        <h5 className="font-semibold text-blue-800 mb-2">How MTA Works</h5>
+                        <ul className="space-y-1 text-sm text-blue-700">
+                          <li>• Tracks individual user interactions via cookies, pixels, and IDs</li>
+                          <li>• Maps the complete customer journey from awareness to conversion</li>
+                          <li>• Applies attribution models to assign credit to touchpoints</li>
+                          <li>• Provides real-time insights for campaign optimization</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                        <h5 className="font-semibold text-green-800 mb-2">Key Benefits</h5>
+                        <ul className="space-y-1 text-sm text-green-700">
+                          <li>• Real-time campaign performance insights</li>
+                          <li>• Granular channel and creative optimization</li>
+                          <li>• Individual customer journey analysis</li>
+                          <li>• Rapid testing and iteration capabilities</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                        <h5 className="font-semibold text-amber-800 mb-2">Limitations</h5>
+                        <ul className="space-y-1 text-sm text-amber-700">
+                          <li>• Privacy constraints limit data collection</li>
+                          <li>• Primarily focused on digital touchpoints</li>
+                          <li>• Can overattribute to last-click interactions</li>
+                          <li>• Requires significant data infrastructure</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <AttributionChart model={attributionModel} onModelChange={setAttributionModel} />
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card title="MTA Implementation" accent="blue">
+                  <ResourcePanel type="tool" accent="blue" resources={[
+                    {
+                      title: "Google Analytics 4",
+                      description: "Free attribution modeling with data-driven attribution, cross-platform tracking, and conversion path analysis.",
+                      link: "https://analytics.google.com/"
+                    },
+                    {
+                      title: "Adobe Analytics",
+                      description: "Enterprise attribution with advanced segmentation, algorithmic attribution, and real-time analysis capabilities."
+                    },
+                    {
+                      title: "Attribution Platforms",
+                      description: "Specialized tools like Bizible (now Marketo Measure), Attribution, and Visual IQ for advanced multi-touch attribution."
+                    },
+                    {
+                      title: "Custom Solutions",
+                      description: "Build attribution models using Python, R, or SQL with data from your CRM, ad platforms, and analytics tools."
+                    }
+                  ]} />
+                </Card>
+
+                <Card title="Best Practices" accent="blue">
+                  <ResourcePanel type="practice" accent="blue" resources={[
+                    {
+                      title: "Define Proper Lookback Windows",
+                      description: "Set attribution windows based on your sales cycle: 7-30 days for B2C, 30-90+ days for B2B products."
+                    },
+                    {
+                      title: "Implement Consistent UTM Parameters",
+                      description: "Use standardized UTM naming conventions across all campaigns for accurate channel attribution and reporting."
+                    },
+                    {
+                      title: "Validate with Holdout Tests",
+                      description: "Regular incrementality testing to validate attribution results and identify potential bias in your models."
+                    },
+                    {
+                      title: "Account for Cross-Device Journeys",
+                      description: "Implement user ID tracking and cross-device measurement to capture complete customer journeys."
+                    }
+                  ]} />
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Marketing Mix Modeling */}
+          {activeStep === 3 && (
+            <div className="space-y-6">
+              <Card title="Marketing Mix Modeling (MMM)" accent="emerald">
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div>
+                    <p className="mb-4 text-gray-700">Marketing Mix Modeling uses statistical analysis to measure the impact of marketing activities on business outcomes, providing a holistic view that includes both online and offline channels.</p>
+                    
+                    <div className="space-y-4">
+                      <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                        <h5 className="font-semibold text-emerald-800 mb-2">How MMM Works</h5>
+                        <ul className="space-y-1 text-sm text-emerald-700">
+                          <li>• Uses historical data to build statistical models</li>
+                          <li>• Separates base vs. incremental sales impact</li>
+                          <li>• Accounts for external factors and seasonality</li>
+                          <li>• Models adstock (carryover) and saturation effects</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                        <h5 className="font-semibold text-green-800 mb-2">Key Strengths</h5>
+                        <ul className="space-y-1 text-sm text-green-700">
+                          <li>• Privacy-safe measurement approach</li>
+                          <li>• Includes offline and online channels</li>
+                          <li>• Measures true incrementality</li>
+                          <li>• Ideal for strategic planning and budget allocation</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
+                        <h5 className="font-semibold text-orange-800 mb-2">Considerations</h5>
+                        <ul className="space-y-1 text-sm text-orange-700">
+                          <li>• Requires 2+ years of historical data</li>
+                          <li>• Less granular than attribution methods</li>
+                          <li>• Models updated quarterly or bi-annually</li>
+                          <li>• Needs statistical expertise for implementation</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <MMMVisualization />
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card title="MMM Platforms & Tools" accent="emerald">
+                  <ResourcePanel type="tool" accent="emerald" resources={[
+                    {
+                      title: "Google Meridian",
+                      description: "Open-source MMM framework designed for privacy-safe measurement with built-in geo-experiment integration.",
+                      link: "https://github.com/google/meridian"
+                    },
+                    {
+                      title: "Meta Robyn",
+                      description: "Automated MMM solution with machine learning for model selection, budget optimization, and scenario planning.",
+                      link: "https://facebook.github.io/Robyn/"
+                    },
+                    {
+                      title: "Commercial MMM Platforms",
+                      description: "Enterprise solutions like Nielsen, Analytic Partners, Marketing Evolution offering full-service MMM implementation."
+                    },
+                    {
+                      title: "PyMC-Marketing",
+                      description: "Bayesian marketing mix modeling using probabilistic programming for custom implementations and advanced analysis."
+                    }
+                  ]} />
+                </Card>
+
+                <Card title="Implementation Strategy" accent="emerald">
+                  <ResourcePanel type="practice" accent="emerald" resources={[
+                    {
+                      title: "Data Foundation First",
+                      description: "Establish clean, consistent data collection for media spend, external factors, and business metrics before modeling."
+                    },
+                    {
+                      title: "Start Simple, Iterate",
+                      description: "Begin with a basic model covering major channels, then gradually add complexity and granularity."
+                    },
+                    {
+                      title: "Validate with Experiments",
+                      description: "Use geo-experiments and holdout tests to calibrate MMM coefficients and validate model accuracy."
+                    },
+                    {
+                      title: "Plan Regular Updates",
+                      description: "Schedule quarterly or bi-annual model refreshes to account for changing market conditions and media effectiveness."
+                    }
+                  ]} />
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* Step 4: Comparison & Integration */}
+          {activeStep === 4 && (
+            <div className="space-y-6">
+              <Card title="MTA vs MMM: A Strategic Comparison" accent="violet">
+                <ComparisonFramework />
+              </Card>
+
+              <Card title="Integration Framework: Why You Need Both" accent="violet">
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div>
+                    <h5 className="font-semibold text-violet-800 mb-4">The Unified Approach</h5>
+                    <p className="mb-4 text-gray-700">Rather than choosing between MTA and MMM, leading organizations use both approaches in a complementary framework that leverages the strengths of each method.</p>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                        <div className="font-medium text-blue-800">Short-term Optimization (MTA)</div>
+                        <div className="text-sm text-blue-700">Daily campaign adjustments, creative testing, and tactical budget shifts</div>
+                      </div>
+                      <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
+                        <div className="font-medium text-emerald-800">Strategic Planning (MMM)</div>
+                        <div className="text-sm text-emerald-700">Annual budget allocation, channel mix optimization, and long-term strategy</div>
+                      </div>
+                      <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                        <div className="font-medium text-purple-800">Validation Layer</div>
+                        <div className="text-sm text-purple-700">Incrementality tests validate both approaches and resolve discrepancies</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200">
+                      <h5 className="font-semibold text-violet-800 mb-4">Integration Workflow</h5>
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold">1</div>
+                          <div className="text-sm">
+                            <div className="font-medium">Weekly MTA Review</div>
+                            <div className="text-gray-600">Analyze performance and make tactical adjustments</div>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold">2</div>
+                          <div className="text-sm">
+                            <div className="font-medium">Monthly MMM Insights</div>
+                            <div className="text-gray-600">Review long-term trends and saturation curves</div>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold">3</div>
+                          <div className="text-sm">
+                            <div className="font-medium">Quarterly Calibration</div>
+                            <div className="text-gray-600">Run incrementality tests to validate models</div>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold">4</div>
+                          <div className="text-sm">
+                            <div className="font-medium">Annual Strategy</div>
+                            <div className="text-gray-600">Set budget allocation based on MMM insights</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {/* Step 5: Tools & Implementation */}
+          {activeStep === 5 && (
+            <div className="space-y-6">
+              <Card title="Implementation Roadmap" accent="amber">
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                    <h5 className="font-semibold text-amber-800 mb-3">Phase 1: Foundation (0-3 months)</h5>
+                    <ul className="space-y-2 text-sm text-amber-700">
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Audit current measurement capabilities</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Establish data infrastructure and governance</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Implement basic attribution tracking</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Train team on measurement fundamentals</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                    <h5 className="font-semibold text-blue-800 mb-3">Phase 2: Build (3-9 months)</h5>
+                    <ul className="space-y-2 text-sm text-blue-700">
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Deploy advanced MTA solution</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Implement MMM framework</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Set up incrementality testing program</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Create unified reporting dashboard</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                    <h5 className="font-semibold text-emerald-800 mb-3">Phase 3: Optimize (9+ months)</h5>
+                    <ul className="space-y-2 text-sm text-emerald-700">
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Advanced model automation and AI</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Real-time optimization capabilities</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Continuous model improvement</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span>Organization-wide adoption</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card title="Essential Toolkit" accent="amber">
+                  <div className="space-y-3">
+                    <h5 className="font-semibold text-amber-800">Free & Open Source</h5>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <div className="font-medium text-sm">Google Analytics 4</div>
+                          <div className="text-xs text-gray-600">Attribution modeling & reporting</div>
+                        </div>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Free</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <div className="font-medium text-sm">Meta Robyn</div>
+                          <div className="text-xs text-gray-600">Automated MMM platform</div>
+                        </div>
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Open Source</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <div className="font-medium text-sm">Google Meridian</div>
+                          <div className="text-xs text-gray-600">Privacy-safe MMM framework</div>
+                        </div>
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Open Source</span>
+                      </div>
+                    </div>
+                    
+                    <h5 className="font-semibold text-amber-800 pt-4">Enterprise Solutions</h5>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <div className="font-medium text-sm">Adobe Analytics</div>
+                          <div className="text-xs text-gray-600">Advanced attribution & analysis</div>
+                        </div>
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Enterprise</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <div className="font-medium text-sm">Nielsen MMM</div>
+                          <div className="text-xs text-gray-600">Full-service MMM solution</div>
+                        </div>
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Enterprise</span>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card title="Success Metrics" accent="amber">
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-semibold text-amber-800 mb-3">Technical KPIs</h5>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between p-2 bg-white rounded border">
+                          <span>Data Accuracy</span>
+                          <span className="text-emerald-600 font-medium">95%+</span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-white rounded border">
+                          <span>Attribution Coverage</span>
+                          <span className="text-emerald-600 font-medium">90%+</span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-white rounded border">
+                          <span>MMM Model R²</span>
+                          <span className="text-emerald-600 font-medium">0.8+</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h5 className="font-semibold text-amber-800 mb-3">Business Impact</h5>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between p-2 bg-white rounded border">
+                          <span>ROAS Improvement</span>
+                          <span className="text-blue-600 font-medium">15%+</span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-white rounded border">
+                          <span>Decision Speed</span>
+                          <span className="text-blue-600 font-medium">30% faster</span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-white rounded border">
+                          <span>Cost Reduction</span>
+                          <span className="text-blue-600 font-medium">20%+</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <Card title="Key Resources & Next Steps" accent="amber">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h5 className="font-semibold text-amber-800 mb-3">Essential Reading</h5>
+                    <div className="space-y-2">
+                      <a href="https://marketingplatform.google.com/about/analytics/" target="_blank" className="block p-3 bg-white rounded-lg border hover:border-amber-300 transition-colors">
+                        <div className="font-medium text-sm">Google Analytics Attribution Guide</div>
+                        <div className="text-xs text-gray-600">Complete guide to attribution in GA4</div>
+                      </a>
+                      <a href="https://facebook.github.io/Robyn/" target="_blank" className="block p-3 bg-white rounded-lg border hover:border-amber-300 transition-colors">
+                        <div className="font-medium text-sm">Meta Robyn Documentation</div>
+                        <div className="text-xs text-gray-600">Open-source MMM implementation</div>
+                      </a>
+                      <a href="https://www.thinkwithgoogle.com/marketing-strategies/data-and-measurement/" target="_blank" className="block p-3 bg-white rounded-lg border hover:border-amber-300 transition-colors">
+                        <div className="font-medium text-sm">Think with Google: Measurement</div>
+                        <div className="text-xs text-gray-600">Latest insights and best practices</div>
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-semibold text-amber-800 mb-3">Next Steps</h5>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border">
+                        <div className="font-medium text-sm mb-1">1. Assess Your Current State</div>
+                        <div className="text-xs text-gray-700">Audit existing measurement capabilities and identify gaps</div>
+                      </div>
+                      <div className="p-3 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg border">
+                        <div className="font-medium text-sm mb-1">2. Start with Quick Wins</div>
+                        <div className="text-xs text-gray-700">Implement basic attribution in GA4 or similar platform</div>
+                      </div>
+                      <div className="p-3 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border">
+                        <div className="font-medium text-sm mb-1">3. Plan Your MMM Strategy</div>
+                        <div className="text-xs text-gray-700">Gather historical data and choose MMM platform</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+  </script>
+</body>
+</html>
